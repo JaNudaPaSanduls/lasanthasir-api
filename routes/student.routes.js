@@ -7,7 +7,7 @@ const Payment = require('../models/Payment');
 router.post('/create', auth, async (req, res) => {
     try {
         console.log(req)
-        const { class_id, fname, lname, tel_number, nic, grade, Class } = req.body;
+        const { class_id, fname, lname, tel_number, nic, grade, Class, profilePic } = req.body;
         const check_id = await Student.findOne({ classId: class_id, class: Class });
         if (check_id) {
             throw new Error('Class Id already exist');
@@ -28,7 +28,8 @@ router.post('/create', auth, async (req, res) => {
             tel_number: tel_number,
             nic: nic,
             grade: grade,
-            class: Class
+            class: Class,
+            profilePic: profilePic
         };
 
         const newStudent = new Student(student);
@@ -239,7 +240,7 @@ router.patch('/mark/:id', auth, async (req, res) => {
 router.patch('/update/:id', auth, async (req, res) => {
     try {
         const studentID = req.params.id;
-        const { fname, lname, tel_number, nic } = req.body;
+        const { fname, lname, tel_number, nic, profilePic } = req.body;
         const stu = await Student.findById(studentID);
         const check_nic = await Student.findOne({ nic });
         console.log(JSON.stringify(stu._id));
@@ -260,7 +261,8 @@ router.patch('/update/:id', auth, async (req, res) => {
             fname: fname,
             lname: lname,
             tel_number: tel_number,
-            nic: nic
+            nic: nic,
+            profilePic: profilePic
         };
         const updateStudent = await Student.findByIdAndUpdate(studentID, student);
         res.status(200).send({ status: 'Student updated', updated_student: student });
